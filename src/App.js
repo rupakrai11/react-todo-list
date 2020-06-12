@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {v1 as uuid} from "uuid"; 
 import TodoList from './components/TodoList';
-import TodoItem from './components/TodoItem';
+
 import TodoInput from './components/TodoInput';
 
 
@@ -10,48 +10,58 @@ class App extends Component {
     items:[],
     id:uuid(),
     item:'',
-    edititem:false
-  }
+    editItem:false
+  };
   handleChange=(e)=>{
    this.setState({
      item:e.target.value
    });
-  }
+  };
   handleSubmit=(e)=>{
     e.preventDefault();
     const newItem={
       id:this.state.id,
       title:this.state.item
-    }
+    };
     // ... spread oprator
-    const UpdatetedItems=[...this.state.items,newItem]
+    const UpdatetedItems=[...this.state.items,newItem];
 
     this.setState({
       items:UpdatetedItems,
-      item:'',
+      item:"",
       id:uuid(),
-      edititem:false
+      editItem:false
 
     });
-  }
+  };
   clearList=()=>{
     this.setState({
       items:[]
-    })
+    });
      
     
-  }
-  handleEdit=(id)=>{
-     console.log(`Handle Edit ${id}`)
-  }
-  handleDelete=(id)=>{
+  };
+  handleDelete=id=>{
     const filterItems=this.state.items.filter
     (item=>item.id !==id)
     this.setState({
-      items:[]
-    })
+     items:filterItems
+    });
    
-  }
+  };
+
+  handleEdit= id =>{
+    const filterItems=this.state.items.filter(item=>item.id!==id);
+    const selectedItem=this.state.items.find(item=>item.id===id);
+    this.setState({
+      items:filterItems,
+      item:selectedItem.title,
+      id:id,
+      editItem:true
+     
+    });
+  };
+  
 
   render()
   {
@@ -66,6 +76,7 @@ class App extends Component {
       item={this.state.item}
       handleChange={this.handleChange} 
       handleSubmit={this.handleSubmit}
+      editItem={this.state.editItem}
       />
       
       <TodoList  items={this.state.items}
